@@ -1,4 +1,3 @@
-version: '3'
 services:
 
   user-service:
@@ -7,17 +6,27 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      
+    networks:
+      - my-network
+
   product-service:
     build: ./product-service
     ports:
       - "3001:3000"
     environment:
       - NODE_ENV=development
-      
+    networks:
+      - my-network
+
   order-service:
     build: ./order-service
     ports:
       - "3002:3000"
     environment:
       - NODE_ENV=development
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
