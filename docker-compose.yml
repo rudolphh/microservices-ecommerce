@@ -3,30 +3,113 @@ services:
   user-service:
     build: ./user-service
     ports:
-      - "3000:3000"
+      - "${PORT_USER_SERVICE}:3000" # Ensure this port is unique and does not conflict
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV}
+      - POSTGRES_HOST=${POSTGRES_HOST_USER_SERVICE}
+      - POSTGRES_DB=${POSTGRES_DB_USER_SERVICE}
+      - POSTGRES_USER=${POSTGRES_USER_USER_SERVICE}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_USER_SERVICE}
     networks:
       - my-network
+    depends_on:
+      user-service-db:
+        condition: service_healthy
+
+  user-service-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_USER_SERVICE}
+      POSTGRES_USER: ${POSTGRES_USER_USER_SERVICE}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_USER_SERVICE}
+    volumes:
+      - user-service-data:/var/lib/postgresql/data
+    networks:
+      - my-network
+    ports:
+      - "${POSTGRES_PORT_USER_SERVICE}:5432"  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_USER_SERVICE} -d ${POSTGRES_DB_USER_SERVICE}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   product-service:
     build: ./product-service
     ports:
-      - "3001:3000"
+      - "${PORT_PRODUCT_SERVICE}:3000" 
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV}
+      - POSTGRES_HOST=${POSTGRES_HOST_PRODUCT_SERVICE}
+      - POSTGRES_DB=${POSTGRES_DB_PRODUCT_SERVICE}
+      - POSTGRES_USER=${POSTGRES_USER_PRODUCT_SERVICE}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_PRODUCT_SERVICE}
     networks:
       - my-network
+    depends_on:
+      product-service-db:
+        condition: service_healthy
+
+  product-service-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_PRODUCT_SERVICE}
+      POSTGRES_USER: ${POSTGRES_USER_PRODUCT_SERVICE}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_PRODUCT_SERVICE}
+    volumes:
+      - product-service-data:/var/lib/postgresql/data
+    networks:
+      - my-network
+    ports:
+      - "${POSTGRES_PORT_PRODUCT_SERVICE}:5432"  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_PRODUCT_SERVICE} -d ${POSTGRES_DB_PRODUCT_SERVICE}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   order-service:
     build: ./order-service
     ports:
-      - "3002:3000"
+      - "${PORT_ORDER_SERVICE}:3000" 
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV}
+      - POSTGRES_HOST=${POSTGRES_HOST_ORDER_SERVICE}
+      - POSTGRES_DB=${POSTGRES_DB_ORDER_SERVICE}
+      - POSTGRES_USER=${POSTGRES_USER_ORDER_SERVICE}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_ORDER_SERVICE}
     networks:
       - my-network
+    depends_on:
+      order-service-db:
+        condition: service_healthy
+
+  order-service-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_ORDER_SERVICE}
+      POSTGRES_USER: ${POSTGRES_USER_ORDER_SERVICE}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_ORDER_SERVICE}
+    volumes:
+      - order-service-data:/var/lib/postgresql/data
+    networks:
+      - my-network
+    ports:
+      - "${POSTGRES_PORT_ORDER_SERVICE}:5432"  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER_ORDER_SERVICE} -d ${POSTGRES_DB_ORDER_SERVICE}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
 networks:
   my-network:
     driver: bridge
+
+volumes:
+  user-service-data:
+  product-service-data:
+  order-service-data:
