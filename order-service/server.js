@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const logger = require('./src/utils/logger');
+
 const port = 3000;
 
 // Middleware
@@ -12,5 +14,5 @@ app.get('/', (req, res) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Order service listening at http://localhost:${port}`);
+  logger.info(`Order service listening at http://localhost:${port}`);
 });
