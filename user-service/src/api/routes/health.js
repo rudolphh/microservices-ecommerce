@@ -1,8 +1,10 @@
 // health.js
 // Route for health check of the service, including database connectivity check
-const express = require('express')
+
+import express from 'express';
+import sequelize from '../../database/sequelizeConfig.js';
+
 const router = express.Router();
-const { sequelize } = require('../../database/sequelizeConfig');
 
 /**
  * @swagger
@@ -52,4 +54,4 @@ router.get('/health', async (req, res) => {
     }
 })
 
-module.exports = router;
+export default router;

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "User service for the microservices e-commerce platform",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },

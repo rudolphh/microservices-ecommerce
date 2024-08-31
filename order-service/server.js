@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import logger from './src/utils/logger.js';
+
 const app = express();
-const logger = require('./src/utils/logger');
 
 const port = 3000;
 

@@ -1,7 +1,7 @@
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
+import User from '../../models/User.js';
+import bcrypt from 'bcrypt';
 
-const registerUser = async (userData) => {
+const createUser = async (userData) => {
     const { username, email, password } = userData;
 
     // check if user already exists
@@ -21,7 +21,7 @@ const registerUser = async (userData) => {
     return user;
 };
 
-module.exports = {
-    registerUser,
+export {
+    createUser,
 };
 

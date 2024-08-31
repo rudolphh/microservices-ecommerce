@@ -1,13 +1,17 @@
-require('dotenv').config()
-const express = require('express');
-const app = express();
-const { initializeDatabase, syncDatabase } = require('./src/database/sequelizeConfig')
-const { swaggerUi, swaggerSpec } = require('./src/config/swagger');
-const logger = require('./src/utils/logger');
-const healthRoutes = require('./src/api/routes/health');
+import { initializeDatabase, syncDatabase } from './src/database/sequelizeConfig.js';
+import { swaggerSpec, swaggerUi } from './src/config/swagger.js';
 
+import dotenv from 'dotenv';
+import express from 'express';
+import healthRoutes from './src/api/routes/health.js';
+import logger from './src/utils/logger.js';
+import userRoutes from './src/api/routes/userRoutes.js';
+
+dotenv.config()
 
 initializeDatabase();
+
+const app = express();
 
 // Middleware
 app.use(express.json());

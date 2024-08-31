@@ -1,5 +1,5 @@
-const {Sequelize} = require('sequelize');
-const logger = require('../utils/logger');
+import { Sequelize } from 'sequelize';
+import logger from '../utils/logger.js';
 
 const sequelize = new Sequelize(
     process.env.POSTGRES_DB, // db
@@ -41,5 +41,5 @@ const syncDatabase = async () => {
     }
 }
 
-
-module.exports = { sequelize, initializeDatabase, syncDatabase };
+export default sequelize
+export { initializeDatabase, syncDatabase };
